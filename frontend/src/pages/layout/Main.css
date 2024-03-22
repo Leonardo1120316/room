@@ -1,0 +1,23 @@
+#MainBox{
+    height: 100vh;
+}
+#MainTitle{
+    height: 70px;
+    width: 100%;
+    display: flex;
+}
+#logo{
+    height: 50px;
+    width: 50px;
+    margin: auto 10px;
+}
+#title{
+    line-height: 70px;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    font-size:larger;
+}
+.header{
+    position: relative;
+}

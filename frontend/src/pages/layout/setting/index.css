@@ -1,0 +1,11 @@
+.setting{
+    width:180px;
+    height: 100%;
+    display: inline-block;
+    position:absolute;
+    right: 0px;
+    text-align: center;
+}
+.item2{
+    margin-left: 20px;
+}

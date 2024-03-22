@@ -1,0 +1,11 @@
+.outBox{
+    padding: 20px;
+    position: relative;
+}
+.avatar{
+    margin-bottom: 40px;
+}
+.btn{
+    position: absolute;
+    right: 0px;
+}
