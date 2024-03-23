@@ -7,7 +7,15 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    userName: {
+    username: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    roomLocation: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    roomNumber: {
       type: DataTypes.STRING(255),
       allowNull: true
     }

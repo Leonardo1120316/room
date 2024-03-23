@@ -1,28 +1,39 @@
 import React from 'react';
-import { Button, Input, Form } from 'antd';
+import { Button, Input, Form, message } from 'antd';
 import './index.css'
+import { useDispatch, useSelector } from "react-redux"
+import api from '../../../api/user'
+const UserUpdate = ()=> {
+    const [messageApi, contextHolder] = message.useMessage();
+    const { currentUser } = useSelector((state) => ({
+        currentUser: state.UserStore.currentUser
+      }))
+    const onFinish =()=>{
 
-export default class UserUpdate extends React.Component {
- 
-    constructor() {
-        super();
-        this.state ={
-            form: {}
+    }
+
+    const onFinishFailed =()=>{
+
+    }
+   
+    const [form] = Form.useForm();
+        const submit = ()=>{
+            let formdata = form.getFieldValue()
+            console.log({userPassword: formdata.userPassword,id: currentUser})
+            if(formdata.checkPassword==formdata.userPassword){
+                api.updatePassword({userPassword: formdata.userPassword,id: currentUser}).then((res)=>{
+                    messageApi.info('修改成功');
+                }).catch((err)=>{
+                    messageApi.info('修改失败');
+                })
+            }else{
+                messageApi.info('修改失败');
+            }
         }
-    }
-    
-    onFinish =()=>{
-
-    }
-
-    onFinishFailed =()=>{
-
-    }
-
-    render() {
-
-        return <div className='outBox1'>
+        return (<div className='outBox1'>
+            {contextHolder}
             <Form
+                form={form}
                 name="basic"
                 labelCol={{
                     span: 8,
@@ -33,8 +44,8 @@ export default class UserUpdate extends React.Component {
                 style={{
                     maxWidth: 600,
                 }}
-                onFinish={this.onFinish}
-                onFinishFailed={this.onFinishFailed}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
                 <Form.Item
@@ -69,11 +80,12 @@ export default class UserUpdate extends React.Component {
                         span: 16,
                     }}
                 >
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" onClick={submit}>
                         提交
                     </Button>
                 </Form.Item>
             </Form>
         </div>
-    }
+        )
 }
+export default UserUpdate

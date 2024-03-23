@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Space } from 'antd';
+import { Button, Form, Input, Space, message } from 'antd';
 import { useNavigate } from 'react-router-dom'
 import './login.css'
 import api from '../../../api/login'
@@ -15,6 +15,7 @@ const tailLayout = {
 };
 
 const Login = () => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
 
     const {currentUser} = useSelector((state)=>({
@@ -32,18 +33,21 @@ const Login = () => {
     const login = async () => {
         await api.login(form.getFieldValue()).then((res)=>{
              if(res.code == "200"){
+                messageApi.info('登录成功');
                 dispatch({type:"setCurrentUser",val: res.data.id})
                 navigate('/')
              }
         }).catch((error)=>{
-             console.log("login error")
+            messageApi.info('登录失败');
         })
     };
 
     return (
         <div class="loginBox">
+            {contextHolder}
             <div class="formBox">
                 <div class="form">
+                    <h1>登录</h1>
                     <Form
                         {...layout}
                         form={form}

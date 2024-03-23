@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Form, Input, Select, Space } from 'antd';
-import { useNavigate, Routes, Route } from 'react-router-dom'
+import { Button, Form, Input, Space, message } from 'antd';
+import { useNavigate } from 'react-router-dom'
 import './register.css'
 import api from '../../../api/login'
 
@@ -14,13 +14,17 @@ const tailLayout = {
 };
 
 const Register = () => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     
     const navigate = useNavigate();
 
     const toRegister = async(values) => {
-        await api.register(form.getFieldValue());
-        console.log(form.getFieldValue())
+        await api.register(form.getFieldValue()).then((res)=>{
+                messageApi.info('注册成功');
+        }).catch((err)=>{
+            messageApi.info("注册失败")
+        })
     };
 
     const back = () => {
@@ -29,8 +33,10 @@ const Register = () => {
 
     return (
         <div class="loginBox">
+            {contextHolder}
             <div class="formBox">
                 <div class="form">
+                    <h1>账号注册</h1>
                     <Form
                         {...layout}
                         form={form}

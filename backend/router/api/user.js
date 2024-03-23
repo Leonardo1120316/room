@@ -65,4 +65,24 @@ router.get('/userinfo', async (req,res) => {
     })
 })
 
+router.post('/updateuser', async (req, res) => {
+    models.user.update(req.body,{ where: { id: req.body.id } }).then(async item => {
+        return res.status(200).json({msg:'success'})
+    }).catch((error) => {
+        return res.status(400).json({ error: error })
+    })
+})
+
+router.post('/updatepassword', async (req, res) => {
+    console.log(req.body)
+    await bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(req.body.userPassword, salt,async function (err, hash) {
+            models.user.update({userPassword: hash},{ where: { id: req.body.id } }).then(async item => {
+                return res.status(200).json({msg:'success'})
+            }).catch((error) => {
+                return res.status(400).json({ error: error })
+            })
+        })})
+})
+
 module.exports = router;
