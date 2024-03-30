@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Space, Table, Button, Modal, Form, Input, message, Tag } from 'antd';
-import { useDispatch, useSelector } from "react-redux"
-import api from '../../api/record'
+import api from '../../../api/record'
 
-const Appointment = () => {
+const Approve = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const { currentUser } = useSelector((state) => ({
-    currentUser: state.UserStore.currentUser
-  }))
   const [data, setdata] = useState([])
   async function runEffect() {
-      await api.searchRecordList({id: currentUser}).then((res) => {
+      await api.recordList().then((res) => {
         setdata([...res.list])
       }
       ).catch(err => {
@@ -21,17 +17,42 @@ const Appointment = () => {
   useEffect(() => {
     runEffect();
   }, [])
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formdata, setformdata] = useState({});
-  const showModal = (record) => {
+  //approve
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const approveModal = (record) => {
     setformdata(record)
-    setIsModalOpen(true);
+    setIsApproveModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
+  const approveHandleOk = async() => {
+    await api.editRecord({id: formdata.id,state: '2'}).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
+    setIsApproveModalOpen(false);
+    runEffect()
   };
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const approveHandleCancel = () => {
+    setIsApproveModalOpen(false);
+  };
+  //reject
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  const rejectModal = (record) => {
+    setformdata(record)
+    setIsRejectModalOpen(true);
+  };
+  const rejectHandleOk = async() => {
+    await api.editRecord({id: formdata.id,state: '1'}).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
+    setIsRejectModalOpen(false);
+    runEffect()
+  };
+  const rejectHandleCancel = () => {
+    setIsRejectModalOpen(false);
   };
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const editModal = (record) => {
@@ -77,7 +98,7 @@ const Appointment = () => {
       key: 'state',
       render: (_, record) => (
         <Space size="middle">
-          {record.state==0? <Tag color='blue'>审批中</Tag>: record.state==1? <Tag color='red'>拒绝</Tag>: <Tag color='green'>审批通过</Tag>}
+          {record.state==0? <Tag color='blue'>审批中</Tag>: (record.state==1 ? <Tag color='red'>拒绝</Tag>: <Tag color='green'>审批通过</Tag>)}
         </Space>
       ),
     },
@@ -86,7 +107,8 @@ const Appointment = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button onClick={()=>{showModal(record)}} type='primary'>查看</Button>
+          <Button onClick={()=>{approveModal(record)}} type='primary'>批准</Button>
+          <Button onClick={()=>{rejectModal(record)}} type='primary'>拒绝</Button>
           <Button onClick={()=>{editModal(record)}}>删除</Button>
         </Space>
       ),
@@ -96,26 +118,16 @@ const Appointment = () => {
     <div>
       {contextHolder}
       <Table columns={columns} dataSource={data} />
-      <Modal title="查看" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-      <Form form={form}>
-          <Form.Item name="username" label="ID" >
-            <Input disabled placeholder={formdata.id}/>
-          </Form.Item>
-          <Form.Item name="userAccount" label="教室编号">
-            <Input disabled placeholder={formdata.roomNumber} />
-          </Form.Item>
-          <Form.Item name="introduce" label="教室地址" >
-            <Input disabled placeholder={formdata.roomLocation}/>
-          </Form.Item>
-          <Form.Item name="email" label="预约学生" >
-            <Input disabled placeholder={formdata.username}/>
-          </Form.Item>
-        </Form>
+      <Modal title="同意" open={isApproveModalOpen} onOk={approveHandleOk} onCancel={approveHandleCancel}>
+         <span>是否确认同意？</span>
       </Modal>
-      <Modal title="删除" open={isEditModalOpen} onOk={editHandleOk} onCancel={editHandleCancel}>
+      <Modal title="拒绝" open={isRejectModalOpen} onOk={rejectHandleOk} onCancel={rejectHandleCancel}>
+         <span>是否确认拒绝？</span>
+      </Modal>
+      <Modal title="修改" open={isEditModalOpen} onOk={editHandleOk} onCancel={editHandleCancel}>
          <span>是否确认删除？</span>
       </Modal>
     </div>
   );
 };
-export default Appointment;
+export default Approve;

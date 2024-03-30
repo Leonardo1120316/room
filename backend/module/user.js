@@ -46,6 +46,18 @@ module.exports = function(sequelize, DataTypes) {
     friend: {
       type: DataTypes.STRING(1024),
       allowNull: true
+    },
+    association: {
+      type: DataTypes.STRING(1024),
+      allowNull: true
+    },
+    class: {
+      type: DataTypes.STRING(1024),
+      allowNull: true
+    },
+    role: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
     sequelize,

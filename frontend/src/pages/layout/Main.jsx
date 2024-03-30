@@ -24,6 +24,9 @@ const Main = () => {
   const {currentUser} = useSelector((state)=>({
     currentUser: state.UserStore.currentUser
 }))
+  const {role} = useSelector((state)=>({
+    role: state.UserStore.role
+}))
 
   const getItems = (label,item,key,children)=>{
     return {label,item,key,children}
@@ -44,7 +47,7 @@ const Main = () => {
           getItems('修改密码',<UserOutlined />,'/userupdate'),
          ]
     ),
-    getItems('自习教室管理',<VideoCameraOutlined />,'/room',
+    getItems('自习教室选择',<VideoCameraOutlined />,'/room',
          [
           getItems('自习教室列表',<UserOutlined />,'/roomlist'),
           getItems('自习教室推荐',<UserOutlined />,'/roomrecommend')
@@ -55,6 +58,27 @@ const Main = () => {
           getItems('自习预约',<UserOutlined />,'/appointment')
          ] 
     ),           
+  ]
+
+  const items2 = [
+    getItems('个人中心',<UserOutlined />,'/user',
+         [
+          getItems('个人信息',<UserOutlined />,'/userinfo'),
+          getItems('修改密码',<UserOutlined />,'/userupdate'),
+         ]
+    ),
+    getItems('自习教室选择',<VideoCameraOutlined />,'/room',
+         [
+          getItems('自习教室列表',<UserOutlined />,'/roomlist'),
+          getItems('自习教室推荐',<UserOutlined />,'/roomrecommend')
+         ]
+    ),
+    getItems('自习教室管理',<VideoCameraOutlined />,'/roommanager',
+         [
+          getItems('预约审批',<UserOutlined />,'/approve'),
+          getItems('教室管理',<UserOutlined />,'/manage')
+         ]
+    )        
   ]
 
   const onClick = (e) =>{
@@ -73,7 +97,7 @@ const Main = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={['userinfo']}
-          items={items}
+          items={role>0?items2:items}
           selectedKeys={[]}
           defaultOpenKeys={['/user']}
           onClick={ onClick }

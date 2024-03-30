@@ -22,7 +22,23 @@ module.exports = function(sequelize, DataTypes) {
     roomType: {
       type: DataTypes.STRING(255),
       allowNull: true
-    }
+    },
+    max: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    column: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    row: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    tag: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
   }, {
     sequelize,
     tableName: 'room',

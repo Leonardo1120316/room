@@ -8,6 +8,8 @@ import UserUpdate from '../pages/user/UserUpdate/UserUpdate.jsx'
 import Appointment from '../pages/appointment'
 import RoomList from '../pages/room/RoomList'
 import RoomRecommend from '../pages/room/RoomRecommend'
+import Approve from '../pages/admin/Approve'
+import Manage from '../pages/admin/Manage'
 
 export default () => (
     <Routes>
@@ -19,6 +21,8 @@ export default () => (
            <Route path="/appointment" element={<Appointment/>} />
            <Route path="/roomlist" element={<RoomList/>} />
            <Route path="/roomrecommend" element={<RoomRecommend/>} />
+           <Route path="/manage" element={<Manage/>} />
+           <Route path="/approve" element={<Approve/>} />
         </Route>
     </Routes>
 );

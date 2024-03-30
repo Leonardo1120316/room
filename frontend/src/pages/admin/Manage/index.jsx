@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Space, Table, Button, Modal, Form, Input, Col, Row } from 'antd';
 import api from '../../../api/room'
 
-const RoomList = () => {
+const Manage = () => {
   const [form] = Form.useForm();
   const [searchForm] = Form.useForm();
+  const [addForm] = Form.useForm();
   const [data, setdata] = useState([])
   async function runEffect() {
     await api.roomList().then((res) => {
@@ -23,6 +24,9 @@ const RoomList = () => {
     ).catch(err => {
       console.log('err', err)
     })
+  }
+  async function add() {
+    console.log('add')
   }
   useEffect(() => {
     runEffect();
@@ -54,6 +58,40 @@ const RoomList = () => {
   };
   const editHandleCancel = () => {
     setIsEditModalOpen(false);
+  };
+  //delete
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const deleteModal = (record) => {
+    console.log(record)
+    setformdata(record)
+    setIsDeleteModalOpen(true);
+  };
+  const deleteHandleOk = async () => {
+    await api.deleteRoom(formdata.id).then((res) => {
+      runEffect();
+    }).catch((err) => {
+      console.log(err)
+    })
+    setIsDeleteModalOpen(false);
+  };
+  const deleteHandleCancel = () => {
+    setIsDeleteModalOpen(false);
+  };
+  //add
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const addModal = () => {
+    setIsAddModalOpen(true);
+  };
+  const addHandleOk = async () => {
+    await api.addRoom(addForm.getFieldValue()).then((res) => {
+      runEffect();
+    }).catch((err) => {
+      console.log(err)
+    })
+    setIsAddModalOpen(false);
+  };
+  const addHandleCancel = () => {
+    setIsAddModalOpen(false);
   };
   const columns = [
     {
@@ -87,6 +125,8 @@ const RoomList = () => {
       render: (_, record) => (
         <Space size="middle">
           <Button onClick={() => { showModal(record) }} type='primary'>查看</Button>
+          <Button onClick={() => { editModal(record) }}>修改</Button>
+          <Button onClick={() => { deleteModal(record) }}>删除</Button>
         </Space>
       ),
     },
@@ -111,9 +151,12 @@ const RoomList = () => {
                 <Input></Input>
               </Form.Item>
             </Col>
-            <Col className="gutter-row" span={6}>
+            <Col className="gutter-row" span={4}>
               <Button type='primary' onClick={search}>查找</Button>
               <Button  onClick={runEffect}>重置</Button>
+            </Col>
+            <Col className="gutter-row" span={2}>
+              <Button type='primary' onClick={addModal}>新增</Button>
             </Col>
           </Row>
         </Form>
@@ -157,7 +200,35 @@ const RoomList = () => {
           </Form.Item>
         </Form>
       </Modal>
+      <Modal title="新增" open={isAddModalOpen} onOk={addHandleOk} onCancel={addHandleCancel}>
+        <Form form={addForm}>
+          <Form.Item name="roomNumber" label="教室编号">
+            <Input  />
+          </Form.Item>
+          <Form.Item name="roomSeat" label="教室座位">
+            <Input  />
+          </Form.Item>
+          <Form.Item name="roomType" label="教室类型" >
+            <Input />
+          </Form.Item>
+          <Form.Item name="roomLocation" label="教室地址" >
+            <Input  />
+          </Form.Item>
+          <Form.Item name="max" label="最大容纳人数" >
+            <Input  />
+          </Form.Item>
+          <Form.Item name="row" label="行" >
+            <Input  />
+          </Form.Item>
+          <Form.Item name="column" label="列" >
+            <Input  />
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Modal title="删除" open={isDeleteModalOpen} onOk={deleteHandleOk} onCancel={deleteHandleCancel}>
+        <span>是否删除教室？</span>
+      </Modal>
     </div>
   );
 }
-export default RoomList;
+export default Manage;

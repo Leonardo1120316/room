@@ -18,6 +18,22 @@ module.exports = function(sequelize, DataTypes) {
     roomNumber: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    createtime: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    duration: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    state: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
     sequelize,

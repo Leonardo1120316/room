@@ -65,6 +65,21 @@ const UserInfo = () => {
       label: '积分',
       children: userInfo.integral,
     },
+    {
+      key: '4',
+      label: '学院',
+      children: userInfo.association,
+    },
+    {
+      key: '4',
+      label: '班级',
+      children: userInfo.class,
+    },
+    {
+      key: '4',
+      label: '身份',
+      children: userInfo.role>0?"管理员":"普通用户"
+    },
   ];
   const itemsIntroduce = [
     {
@@ -79,8 +94,8 @@ const UserInfo = () => {
         <Avatar size={64} icon={<UserOutlined />} className='avatar' src={userInfo.userAvatar} />
         <Button type='primary' className='btn' onClick={showModal}>修改</Button>
       </div>
-      <Descriptions title="个人信息" items={items} column={2} />
-      <Descriptions title="介绍" items={itemsIntroduce} column={2} />
+      <Descriptions title="个人信息" items={items} column={3} />
+      <Descriptions title="介绍" items={itemsIntroduce} column={1} />
       <Modal title="修改用户信息" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form form={form}>
           <Form.Item name="username" label="姓名" rules={[{ required: true }]}>

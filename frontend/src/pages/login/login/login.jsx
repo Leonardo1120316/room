@@ -18,10 +18,6 @@ const Login = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
 
-    const {currentUser} = useSelector((state)=>({
-        currentUser: state.UserStore.currentUser
-    }))
-
     const dispatch = useDispatch()
 
     const navigate = useNavigate();
@@ -35,6 +31,7 @@ const Login = () => {
              if(res.code == "200"){
                 messageApi.info('登录成功');
                 dispatch({type:"setCurrentUser",val: res.data.id})
+                dispatch({type:"setCurrentRole",val: res.data.role})
                 navigate('/')
              }
         }).catch((error)=>{

@@ -11,7 +11,7 @@ router.post("/login", async (req, res) => {
             bcrypt.compare(req.body.userPassword, user.userPassword)
                 .then(isMatch => {
                     if (isMatch) {
-                        return res.status(200).json({code:"200",data:{id: user.dataValues.id}})
+                        return res.status(200).json({code:"200",data:{id: user.dataValues.id,role: user.role}})
                     }else{
                         return res.status(400).json({ msg: "密码错误" })
                     }
@@ -57,7 +57,10 @@ router.get('/userinfo', async (req,res) => {
             phone: user.phone,
             email: user.email,
             integral: user.integral,
-            introduce: user.introduce
+            introduce: user.introduce,
+            association: user.association,
+            class: user.class,
+            role: user.role
         }
         return res.status(200).json({user: safeUser})   
     }).catch((err)=>{
